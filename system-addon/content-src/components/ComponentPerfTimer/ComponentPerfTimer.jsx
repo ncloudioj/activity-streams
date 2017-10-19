@@ -4,9 +4,10 @@ const {perfService: perfSvc} = require("common/PerfService.jsm");
 
 // Currently record only a fixed set of sections. This will prevent data
 // from custom sections from showing up or from topstories.
-const RECORDED_SECTIONS = ["highlights", "topsites"];
+const RECORDED_SECTIONS = ["highlights", "topsites", "search"];
+const RECORDED_FIRST_PAINTED = ["topsites", "search"];
 
-class ComponentPerfTimer extends React.Component {
+class ComponentPerfTimer extends React.PureComponent {
   constructor(props) {
     super(props);
     // Just for test dependency injection:
@@ -129,8 +130,8 @@ class ComponentPerfTimer extends React.Component {
   }
 
   _sendPaintedEvent() {
-    // Record first_painted event but only send if topsites.
-    if (this.props.id !== "topsites") {
+    // Record first_painted event but only send for for topsites and search.
+    if (!RECORDED_FIRST_PAINTED.includes(this.props.id)) {
       return;
     }
 
